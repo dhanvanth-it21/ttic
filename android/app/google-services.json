@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "262355639493",
+    "project_id": "ttic-ef26c",
+    "storage_bucket": "ttic-ef26c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262355639493:android:525ec348ec6372370ca4ac",
+        "android_client_info": {
+          "package_name": "com.example.ttic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlDQ9EmD3NO0ZzkIRJFSvQ_ZfCp0jzI58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
