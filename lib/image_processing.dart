@@ -6,6 +6,7 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 
 class ImageProcessing {
   static File? selectedImage;
+  static double scale = 1.0;
 
   static Future<void> takePhoto(Function(String) onUpdateExtractedText) async {
     final picker = ImagePicker();
@@ -59,6 +60,66 @@ class ImageProcessing {
     textRecognizer.close();
   }
 
+  static Widget buildImageContent(
+    TextEditingController textEditingController,
+    VoidCallback resetImageContent,
+    Function(String) copyToClipboard,
+    String extractedText,
+  ) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: const Color.fromARGB(255, 0, 0, 0),
+            child: SingleChildScrollView(
+              child: GestureDetector(
+                onScaleUpdate: (ScaleUpdateDetails details) {
+                  scale = scale * details.scale;
+                },
+                child: InteractiveViewer(
+                  child: Transform.scale(
+                    scale: scale,
+                    child: Image.file(
+                      selectedImage!,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Divider(height: 1, thickness: 10),
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Color.fromARGB(255, 0, 0, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Extracted Text:'),
+                SizedBox(height: 8),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: TextField(
+                      controller: textEditingController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(25.0),
+                      ),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   static Future<File?> cropImage(
       Function(String) onUpdateExtractedText, File imageFile) async {
     final croppedFile = await ImageCropper().cropImage(
@@ -88,52 +149,5 @@ class ImageProcessing {
     }
 
     return null;
-  }
-
-  static Widget buildImageContent(
-    TextEditingController textEditingController,
-    VoidCallback resetImageContent,
-    Function(String) copyToClipboard,
-    String extractedText,
-  ) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: const Color.fromARGB(255, 0, 0, 0),
-            child: Image.file(
-              selectedImage!,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Color.fromARGB(255, 0, 0, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Extracted Text:'),
-                SizedBox(height: 8),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: TextField(
-                      controller: textEditingController,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(25.0),
-                      ),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }
